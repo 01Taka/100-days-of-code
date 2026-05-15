@@ -21,6 +21,7 @@ export default function PropertyTypeRow({
   });
 
   const options = [
+    "AUTO",
     "INT",
     "FLOAT",
     "NUMBER",
@@ -40,7 +41,7 @@ export default function PropertyTypeRow({
         <div key={field.id} className="flex flex-row">
           <select
             {...register(`properties.${index}.types.${k}.type`)}
-            className="bg-gray-800 p-1"
+            className="bg-gray-900 p-1"
           >
             {options.map((opt) => (
               <option key={opt} value={opt}>

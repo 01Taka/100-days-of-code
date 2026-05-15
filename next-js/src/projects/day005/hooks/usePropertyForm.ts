@@ -11,12 +11,13 @@ export const usePropertyForm = (initialData?: PropertiesFormValues) => {
   const form = useForm<PropertiesFormValues>({
     resolver: zodResolver(PropertiesFormSchema),
     defaultValues: initialData || {
+      name: "",
       properties: [
         {
           id,
           name: "",
           description: "",
-          types: [{ type: "STRING", isArray: false }],
+          types: [{ type: "AUTO", isArray: false }],
           optional: false,
         },
       ],
@@ -34,7 +35,7 @@ export const usePropertyForm = (initialData?: PropertiesFormValues) => {
       id,
       name: "",
       description: "",
-      types: [{ type: "STRING" }],
+      types: [{ type: "AUTO" }],
       optional: false,
     });
   };

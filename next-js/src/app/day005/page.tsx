@@ -1,95 +1,43 @@
 "use client";
 
-import PropertyRow from "@/src/projects/day005/components/PropertyRow";
-import { usePropertyForm } from "@/src/projects/day005/hooks/usePropertyForm";
+import Property from "@/src/projects/day005/components/Property";
+import { usePropertyGroups } from "@/src/projects/day005/hooks/usePropertyGroups";
 import { PropertiesFormValues } from "@/src/projects/day005/types/005.schema";
-import { useFieldArray, Control } from "react-hook-form";
+import { useCallback, useState } from "react";
 
 export default function PropertyManager() {
-  const { form, fields, addProperty, removeProperty, handleSubmit } =
-    usePropertyForm();
+  const { groupsList, saveGroup, addNewGroup } = usePropertyGroups();
+  const [editingId, setEditingId] = useState<string | null>(null);
 
-  const onSubmit = (data: PropertiesFormValues) => {
-    console.log("保存するデータ:", data);
+  const handleAdd = () => {
+    const id = addNewGroup();
+    setEditingId(id);
   };
 
-  return (
-    <div className="p-8">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {fields.map((field, index) => (
-          <PropertyRow
-            key={field.id}
-            index={index}
-            register={form.register}
-            control={form.control}
-          />
-        ))}
-
-        <button
-          type="button"
-          onClick={addProperty}
-          className="w-full py-2 bg-blue-500 text-white rounded"
-        >
-          + プロパティを追加
-        </button>
-
-        <button
-          type="submit"
-          className="w-full py-2 bg-green-600 text-white rounded"
-        >
-          全データを保存
-        </button>
-      </form>
-    </div>
+  const handleSave = useCallback(
+    (id: string, data: PropertiesFormValues) => {
+      saveGroup(id, data);
+      setEditingId(null);
+    },
+    [saveGroup],
   );
-}
-
-// プロパティ内の types 配列を扱うためのコンポーネント
-function TypesFieldArray({ nestIndex, control, register }: any) {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `properties.${nestIndex}.types`,
-  });
 
   return (
-    <div className="mt-4 pl-4 border-l-2">
-      <p className="text-sm font-bold">Types:</p>
-      {fields.map((field, k) => (
-        <div key={field.id} className="flex gap-2 mt-2">
-          <select
-            {...register(`properties.${nestIndex}.types.${k}.type`)}
-            className="border p-1"
-          >
-            <option value="STRING">STRING</option>
-            <option value="INT">INT</option>
-            <option value="BOOLEAN">BOOLEAN</option>
-            <option value="DATE">DATE</option>
-          </select>
-
-          <label className="flex items-center gap-1 text-sm">
-            <input
-              type="checkbox"
-              {...register(`properties.${nestIndex}.types.${k}.isArray`)}
-            />
-            Array
-          </label>
-
-          <button
-            type="button"
-            onClick={() => remove(k)}
-            className="text-xs text-red-400"
-          >
-            削除
-          </button>
-        </div>
+    <div className="flex flex-col gap-3">
+      {groupsList.map((group) => (
+        <Property
+          key={group.id}
+          isEditing={editingId === group.id}
+          data={group}
+          onUpdate={(data) => handleSave(group.id, data)}
+          onEdit={() => {
+            if (!editingId) {
+              setEditingId(group.id);
+            }
+          }}
+        />
       ))}
-      <button
-        type="button"
-        onClick={() => append({ type: "STRING", isArray: false })}
-        className="text-sm text-blue-500 mt-2"
-      >
-        + 型を追加
-      </button>
+      <button onClick={handleAdd}>追加+</button>
     </div>
   );
 }
