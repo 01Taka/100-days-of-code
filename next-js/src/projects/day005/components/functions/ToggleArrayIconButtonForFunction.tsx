@@ -3,11 +3,11 @@
 
 import { Control, Controller } from "react-hook-form";
 import { Dot, Brackets } from "lucide-react";
-import { PropertiesFormValues } from "@/src/projects/day005/types/005.schema";
+import { FunctionStructure } from "@/src/projects/day005/types/functions.schema";
 
 interface ToggleArrayIconButtonProps {
   name: string;
-  control: Control<PropertiesFormValues>;
+  control: Control<FunctionStructure>;
   label?: string;
 }
 

@@ -26,7 +26,7 @@ interface PropertyDisplayProps {
   mode?: DisplayMode; // モード切替用
 }
 
-export default function PropertyDisplay({
+export default function qqPropertyDisplay({
   name,
   properties,
   mode = "full",

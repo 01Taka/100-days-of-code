@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { v7 as uuidv7 } from "uuid";
 
 const ValidationsSchema = z.object({
   array: z
@@ -14,25 +13,27 @@ const ValidationsSchema = z.object({
   negative: z.boolean().optional(),
 });
 
+const TypeSchema = z.object({
+  type: z.enum([
+    "AUTO",
+    "INT",
+    "FLOAT",
+    "NUMBER",
+    "STRING",
+    "CHAR",
+    "DATE",
+    "DATETIME",
+    "TIME",
+    "BOOLEAN",
+    "NULL",
+    "UNDEFINED",
+  ]),
+  isArray: z.boolean().optional(),
+  validations: ValidationsSchema.optional(),
+});
+
 const TypeOrReferenceSchema = z.union([
-  z.object({
-    type: z.enum([
-      "AUTO",
-      "INT",
-      "FLOAT",
-      "NUMBER",
-      "STRING",
-      "CHAR",
-      "DATE",
-      "DATETIME",
-      "TIME",
-      "BOOLEAN",
-      "NULL",
-      "UNDEFINED",
-    ]),
-    isArray: z.boolean().optional(),
-    validations: ValidationsSchema.optional(),
-  }),
+  TypeSchema,
   z.object({
     type: z.literal("REFERENCE"),
     id: z.string(),
@@ -40,7 +41,7 @@ const TypeOrReferenceSchema = z.union([
   }),
 ]);
 
-const PropertySchema = z.object({
+export const PropertySchema = z.object({
   id: z.string().min(1, "IDは必須です"),
   name: z.string().transform((val) => (val === "" ? `AUTO` : val)),
   types: z.array(TypeOrReferenceSchema),
@@ -55,6 +56,7 @@ export const PropertiesFormSchema = z.object({
   properties: z.array(PropertySchema),
 });
 
+export type Type = z.infer<typeof TypeSchema>;
 export type TypeOrReference = z.infer<typeof TypeOrReferenceSchema>;
 export type Property = z.infer<typeof PropertySchema>;
 export type PropertiesFormValues = z.infer<typeof PropertiesFormSchema>;

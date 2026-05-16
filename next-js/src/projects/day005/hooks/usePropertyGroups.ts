@@ -33,7 +33,14 @@ export const usePropertyGroups = () => {
       const newData: PropertyGroup = {
         id,
         name: "",
-        properties: [],
+        properties: [
+          {
+            id: uuidv7(),
+            name: "",
+            types: [{ type: "AUTO" }],
+            description: "",
+          },
+        ],
       };
       return { ...prev, [newData.id]: newData };
     });
