@@ -23,24 +23,19 @@ export default function PropertyRow({
 }: PropertyRowProps) {
   return (
     <div className=" border-l-2 border-gray-400 px-3 w-full">
-      <div className="flex flex-row justify-between">
-        <textarea
-          {...register(`${type}.${index}.description`)}
-          placeholder="Description"
-          className="w-full field-sizing-content resize-none focus:border-blue-500 focus:outline-none py-0"
-          rows={1}
-        />
-        <Trash className="text-red-500" onClick={onRemove} />
-      </div>
+      <textarea
+        {...register(`${type}.${index}.description`)}
+        placeholder="Description"
+        className="w-full field-sizing-content resize-none focus:border-blue-500 focus:outline-none py-0"
+        rows={1}
+      />
       <div className="flex flex-row ">
         <div className="flex flex-row justify-start align-middle h-6">
           <input
-            {...register(`${type}.properties.${index}.name`)}
+            {...register(`${type}.${index}.name`)}
             className="h-full bg-gray-900"
           />
-          <QuestionToggle
-            {...register(`${type}.properties.${index}.optional`)}
-          />
+          <QuestionToggle {...register(`${type}.${index}.optional`)} />
         </div>
         <PropertyTypeRow
           type={type}

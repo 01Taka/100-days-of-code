@@ -1,54 +1,63 @@
 import PropertyRow from "@/src/projects/day005/components/functions/PropertyRowForFunction";
 import { FunctionStructure } from "@/src/projects/day005/types/functions.schema";
-import { Control, FieldArrayWithId, UseFormRegister } from "react-hook-form";
+import { Control, useFieldArray, UseFormRegister } from "react-hook-form";
+import { v7 as uuidv7 } from "uuid";
 
 interface PropertyFormProps {
-  fields: FieldArrayWithId<FunctionStructure>[];
   register: UseFormRegister<FunctionStructure>;
   control: Control<FunctionStructure>;
   type: "args" | "return";
-  addProperty: () => void;
-  removeProperty: (index: number) => void;
   onSubmit: () => void;
 }
 
 export default function PropertyForm({
-  fields,
   register,
   control,
   type,
-  addProperty,
-  removeProperty,
   onSubmit,
 }: PropertyFormProps) {
+  const { append, remove, fields } = useFieldArray({
+    control,
+    name: `${type}`,
+  });
+
   return (
-    <div className="w-full p-3 bg-[#1e1e1e]">
-      <div className="flex flex-col justify-center w-full space-y-3">
-        {fields.map((field, index) => (
-          <PropertyRow
-            key={field.id}
-            type={type}
-            index={index}
-            register={register}
-            control={control}
-            onRemove={() => removeProperty(index)}
-          />
-        ))}
-        <div className="flex flex-row justify-end w-full gap-2">
+    <div className="w-full">
+      <div className="flex flex-row items-end w-full">
+        {/* リスト部分: 余白を詰め、スクロール時も考慮 */}
+        <div className="space-y-2 mb-4">
+          {fields.map((field, index) => (
+            <PropertyRow
+              key={field.id}
+              type={type}
+              index={index}
+              register={register}
+              control={control}
+              onRemove={() => remove(index)}
+            />
+          ))}
+          {fields.length === 0 && (
+            <div className="text-[13px] text-zinc-600 italic py-4 border border-dashed border-zinc-800 rounded-lg text-center">
+              No {type === "args" ? "arguments" : "return values"} defined
+            </div>
+          )}
+        </div>
+
+        {/* アクションボタン: コンパクトかつ機能的 */}
+        <div className="flex flex-row items-center justify-end w-full gap-2 border-zinc-900 pt-4">
           <button
             type="button"
-            onClick={addProperty}
-            className="w-full max-w-32 py-2 bg-blue-950 text-white rounded"
+            onClick={() =>
+              append({
+                id: uuidv7(),
+                name: "",
+                description: "",
+                types: [{ type: "AUTO" }],
+              })
+            }
+            className="text-[11px] font-bold uppercase px-3 py-1.5 bg-zinc-800 text-zinc-300 rounded hover:bg-zinc-700 hover:text-white transition-all border border-zinc-700"
           >
-            + 追加
-          </button>
-
-          <button
-            type="submit"
-            onClick={() => onSubmit()}
-            className="w-full max-w-32 py-2 bg-green-600 text-white rounded"
-          >
-            決定
+            + Add Field
           </button>
         </div>
       </div>

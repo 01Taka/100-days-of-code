@@ -1,6 +1,5 @@
 "use client";
 
-import { ToggleArrayIconButton } from "@/src/projects/day005/components/functions/ToggleArrayIconButtonForFunction";
 import { FunctionStructure } from "@/src/projects/day005/types/functions.schema";
 import { Control, useFieldArray, UseFormRegister } from "react-hook-form";
 
@@ -19,7 +18,7 @@ export default function PropertyTypeRow({
 }: PropertyTypeRowProps) {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `${type}.properties.${index}.types` as const,
+    name: `${type}.${index}.types` as const,
   });
 
   const options = [
@@ -42,7 +41,7 @@ export default function PropertyTypeRow({
       {fields.map((field, k) => (
         <div key={field.id} className="flex flex-row">
           <select
-            {...register(`${type}.properties.${index}.types.${k}.type`)}
+            {...register(`${type}.${index}.types.${k}.type`)}
             className="bg-gray-900 p-1"
           >
             {options.map((opt) => (
@@ -51,10 +50,6 @@ export default function PropertyTypeRow({
               </option>
             ))}
           </select>
-          <ToggleArrayIconButton
-            name={`properties.${index}.types.${k}.isArray`}
-            control={control}
-          />
         </div>
       ))}
     </div>

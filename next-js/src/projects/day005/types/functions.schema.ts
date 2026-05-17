@@ -1,8 +1,5 @@
 import * as z from "zod";
-import {
-  PropertiesFormSchema,
-  PropertySchema,
-} from "@/src/projects/day005/types/005.schema";
+import { PropertySchema } from "@/src/projects/day005/types/005.schema";
 
 /**
  * 具体的な入出力例のスキーマ
@@ -21,12 +18,13 @@ export const FunctionExampleSchema = z.object({
  */
 export const FunctionStructureSchema = z.object({
   // 1. コンセプト
-  name: z.string().min(1, "関数名を入力してください"),
-  role: z.string().min(1, "役割を入力してください"),
+  id: z.string().transform((val) => (val === "" ? `AUTO` : val)),
+  name: z.string().transform((val) => (val === "" ? `AUTO` : val)),
+  role: z.string().transform((val) => (val === "" ? `AUTO` : val)),
 
   // 2. インターフェース（入力と出力の両方を同じスキーマで管理）
   args: PropertySchema.array().describe("引数の定義"),
-  return: PropertiesFormSchema.describe(
+  return: PropertySchema.array().describe(
     "返り値の定義（要素1つなら単一、複数ならオブジェクト）",
   ),
 

@@ -4,26 +4,29 @@ import {
   FunctionStructure,
   FunctionStructureSchema,
 } from "@/src/projects/day005/types/functions.schema";
+import { v7 as uuidv7 } from "uuid";
 
 // 初期値のデフォルト
 const defaultValues: Partial<FunctionStructure> = {
+  id: uuidv7(),
   name: "",
   role: "",
-  args: {
-    name: "arguments",
-    properties: [],
-  },
-  return: {
-    name: "return",
-    properties: [],
-  },
+  args: [
+    { id: uuidv7(), name: "", description: "", types: [{ type: "AUTO" }] },
+  ],
+  return: [
+    { id: uuidv7(), name: "", description: "", types: [{ type: "AUTO" }] },
+  ],
   examples: [],
   edgeCases: [],
   sideEffects: [],
   supplementary: [],
 };
 
-export const useFunctionForm = (initial?: Partial<FunctionStructure>) => {
+export const useFunctionForm = (
+  initial?: Partial<FunctionStructure>,
+  onSubmit?: (data: FunctionStructure) => void,
+) => {
   const form = useForm<FunctionStructure>({
     resolver: zodResolver(FunctionStructureSchema),
     defaultValues: {
@@ -41,16 +44,11 @@ export const useFunctionForm = (initial?: Partial<FunctionStructure>) => {
     formState: { errors },
   } = form;
 
-  const onSubmit = (data: FunctionStructure) => {
-    console.log("Form Data:", data);
-    // ここで保存処理やAIへの送信処理を行う
-  };
-
   return {
     form,
     control,
     register,
     errors,
-    handleSubmit: handleSubmit(onSubmit),
+    handleSubmit: onSubmit ? handleSubmit(onSubmit) : undefined,
   };
 };
