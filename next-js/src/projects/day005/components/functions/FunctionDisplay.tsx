@@ -22,16 +22,13 @@ export default function FunctionDisplay({
   onEdit,
 }: FunctionDisplayProps) {
   return (
-    <div
-      className="w-full max-w-6xl mx-auto bg-zinc-950 rounded-xl shadow-2xl border border-zinc-800 overflow-hidden group"
-      onClick={onEdit}
-    >
+    <div className="w-full max-w-6xl mx-auto bg-zinc-950 rounded-xl shadow-2xl border border-zinc-800 overflow-hidden group">
       {/* Header Section */}
       <div className="w-full p-6 border-b border-zinc-800 bg-zinc-900/30">
         <div className="w-full flex justify-between items-start">
           <div className="w-full space-y-2">
             <div className="flex justify-between w-full">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" onClick={onEdit}>
                 <div className="p-1.5 bg-blue-500/10 rounded-md">
                   <Code2 className="w-5 h-5 text-blue-400" />
                 </div>
