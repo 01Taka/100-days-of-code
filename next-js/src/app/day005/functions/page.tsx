@@ -8,10 +8,17 @@ import { copyFunctionToClipboard } from "@/src/projects/day005/utils/functions.u
 interface PageProps {}
 
 export default function Page({}: PageProps) {
-  const { functions, formManager, activeId } = useFunctionsManager();
+  const {
+    functions,
+    formManager,
+    activeId,
+    addNewFunction,
+    deleteFunction,
+    switchFunction,
+  } = useFunctionsManager();
 
   return (
-    <div className="">
+    <div className="flex flex-col">
       {functions.map((func) =>
         func.id === activeId ? (
           <FunctionForm
@@ -24,9 +31,20 @@ export default function Page({}: PageProps) {
             }
           />
         ) : (
-          <FunctionDisplay key={func.id} data={func} />
+          <FunctionDisplay
+            key={func.id}
+            data={func}
+            onEdit={() => switchFunction(func.id)}
+            onDelete={() => deleteFunction(func.id)}
+          />
         ),
       )}
+      <button
+        className="p-2 place-self-center border rounded-lg w-30"
+        onClick={addNewFunction}
+      >
+        新規関数+
+      </button>
     </div>
   );
 }

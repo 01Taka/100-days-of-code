@@ -50,6 +50,7 @@ export const useFunctionsManager = () => {
 
       setFunctions(updatedList);
       persistToStorage(updatedList);
+      setActiveId(null);
       return updatedList;
     },
     [functions],
